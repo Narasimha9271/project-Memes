@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { MemeCard } from "./MemeCard";
 import Shimmer from "./Shimmer";
+import axios from "axios";
 
 const Body = () => {
     const [memes, setMemes] = useState([]);
@@ -27,11 +28,11 @@ const Body = () => {
     const fetchMemes = async () => {
         setShowShimmer(true);
         try {
-            const response = await fetch("https://meme-api.com/gimme/20");
-            if (!response.ok) {
+            const response = await axios.get("https://meme-api.com/gimme/20");
+            if (!response.data) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            const json = await response.json();
+            const json = response.data;
             setMemes((memes) => [...memes, ...json.memes]);
         } catch (error) {
             console.error("Failed to fetch memes:", error);
